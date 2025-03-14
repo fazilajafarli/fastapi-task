@@ -7,6 +7,7 @@ from auth.utils import hash_password, verify_password, create_access_token
 from pydantic import BaseModel
 import aiomcache
 from auth.dependencies import get_current_user
+from database.schemas import PostCreate 
 
 
 # Load environment variables
@@ -69,6 +70,8 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
 # AddPost endpoint
 @app.post("/addpost")
 def add_post(post: PostCreate, user_email: str = Depends(get_current_user), db: Session = Depends(get_db)):
+    if len(post.text.encode('utf-8')) > 1048576:  # Extra validation
+        raise HTTPException(status_code=413, detail="Too large. Maximum allowed is 1MB.")
     new_post = Post(text=post.text, user_id=db.query(User).filter(User.email == user_email).first().id)
     db.add(new_post)
     db.commit()
