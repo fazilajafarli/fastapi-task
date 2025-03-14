@@ -1,10 +1,9 @@
 import os
-from fastapi import FastAPI, Depends, HTTPException, Security
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database.config import SessionLocal, engine, Base
+from database.config import SessionLocal
 from database.models import User, Post
-from auth.utils import hash_password, verify_password, create_access_token, decode_access_token
+from auth.utils import hash_password, verify_password, create_access_token
 from pydantic import BaseModel
 import aiomcache
 from auth.dependencies import get_current_user
