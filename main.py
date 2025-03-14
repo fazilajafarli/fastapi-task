@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, Depends, HTTPException, Security
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy.orm import Session
@@ -8,6 +9,10 @@ from pydantic import BaseModel
 import aiomcache
 from auth.dependencies import get_current_user
 
+
+# Load environment variables
+SECRET_KEY = os.getenv("SECRET_KEY", "default_secret_key")  
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
 
 # Initialize FastAPI
 app = FastAPI()
